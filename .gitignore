@@ -5,7 +5,7 @@
 *.DS_Store
 Pods/
 Podfile.lock
-*/Config.swift
+test1/test1/Config.swift
 
 ## User settings
 xcuserdata/
