@@ -19,23 +19,14 @@ struct ChattingRooms {
 }
 
 struct ChattingRoom {
-    var idLength: Int?
     var id: String?
-    var chattingRoomNameLength: Int?
     var chattingRoomName: String?
-    var chattingRoomNameEnLength: Int?
     var chattingRoomNameEn: String?
-    var groupIdLength: Int?
     var groupId: String?
-    var channelIdLength: Int?
     var channelId: String?
-    var imageUrlLength: Int?
     var imageUrl: String?
-    var imageUrlEnLength: Int?
     var imageUrlEn: String?
-    var defaultImageUrlLength: Int?
     var defaultImageUrl: String?
-    var lastChatLength: Int?
     var lastChat: String?
     var lastChatTimeStamp: Int?
     var unreadMessageCount: Int?
