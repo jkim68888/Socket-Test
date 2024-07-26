@@ -14,6 +14,11 @@
 		3BFD40582C53843E00BEAC42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BFD40572C53843E00BEAC42 /* Assets.xcassets */; };
 		3BFD405B2C53843E00BEAC42 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3BFD405A2C53843E00BEAC42 /* Base */; };
 		3BFD40632C53847800BEAC42 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD40622C53847800BEAC42 /* Config.swift */; };
+		3BFD40652C5385E100BEAC42 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD40642C5385E100BEAC42 /* Model.swift */; };
+		3BFD40672C53860300BEAC42 /* ByteBufferRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD40662C53860300BEAC42 /* ByteBufferRead.swift */; };
+		3BFD40692C53860C00BEAC42 /* ByteBufferWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD40682C53860C00BEAC42 /* ByteBufferWrite.swift */; };
+		3BFD406C2C53863100BEAC42 /* NIOFoundationCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 3BFD406B2C53863100BEAC42 /* NIOFoundationCompat */; };
+		3BFD406E2C53887900BEAC42 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD406D2C53887900BEAC42 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,10 @@
 		3BFD405A2C53843E00BEAC42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3BFD405C2C53843E00BEAC42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BFD40622C53847800BEAC42 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		3BFD40642C5385E100BEAC42 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		3BFD40662C53860300BEAC42 /* ByteBufferRead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteBufferRead.swift; sourceTree = "<group>"; };
+		3BFD40682C53860C00BEAC42 /* ByteBufferWrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteBufferWrite.swift; sourceTree = "<group>"; };
+		3BFD406D2C53887900BEAC42 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BFD406C2C53863100BEAC42 /* NIOFoundationCompat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +76,10 @@
 				3BFD40592C53843E00BEAC42 /* LaunchScreen.storyboard */,
 				3BFD405C2C53843E00BEAC42 /* Info.plist */,
 				3BFD40622C53847800BEAC42 /* Config.swift */,
+				3BFD40642C5385E100BEAC42 /* Model.swift */,
+				3BFD40662C53860300BEAC42 /* ByteBufferRead.swift */,
+				3BFD40682C53860C00BEAC42 /* ByteBufferWrite.swift */,
+				3BFD406D2C53887900BEAC42 /* Extension.swift */,
 			);
 			path = test2;
 			sourceTree = "<group>";
@@ -86,6 +100,9 @@
 			dependencies = (
 			);
 			name = test2;
+			packageProductDependencies = (
+				3BFD406B2C53863100BEAC42 /* NIOFoundationCompat */,
+			);
 			productName = test2;
 			productReference = 3BFD404B2C53843C00BEAC42 /* test2.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +131,9 @@
 				Base,
 			);
 			mainGroup = 3BFD40422C53843C00BEAC42;
+			packageReferences = (
+				3BFD406A2C53863100BEAC42 /* XCRemoteSwiftPackageReference "swift-nio" */,
+			);
 			productRefGroup = 3BFD404C2C53843C00BEAC42 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,10 +161,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BFD40652C5385E100BEAC42 /* Model.swift in Sources */,
 				3BFD40532C53843C00BEAC42 /* ViewController.swift in Sources */,
 				3BFD40632C53847800BEAC42 /* Config.swift in Sources */,
+				3BFD40672C53860300BEAC42 /* ByteBufferRead.swift in Sources */,
 				3BFD404F2C53843C00BEAC42 /* AppDelegate.swift in Sources */,
 				3BFD40512C53843C00BEAC42 /* SceneDelegate.swift in Sources */,
+				3BFD40692C53860C00BEAC42 /* ByteBufferWrite.swift in Sources */,
+				3BFD406E2C53887900BEAC42 /* Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +393,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3BFD406A2C53863100BEAC42 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.69.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3BFD406B2C53863100BEAC42 /* NIOFoundationCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BFD406A2C53863100BEAC42 /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOFoundationCompat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3BFD40432C53843C00BEAC42 /* Project object */;
 }
