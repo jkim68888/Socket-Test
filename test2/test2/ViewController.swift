@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import NIOCore
-import NIOFoundationCompat
+import NIO
 
 class ViewController: UIViewController {
     
@@ -17,8 +16,6 @@ class ViewController: UIViewController {
     private var timer: Timer?
     private var count: Int32 = 0
     private let config: Config = Config()
-    var decoder: JSONDecoder = JSONDecoder()
-    var encoder: JSONEncoder = JSONEncoder()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,14 +35,17 @@ class ViewController: UIViewController {
     private func sessionLogin() {
         let _: [String: Any] = [
             "cmd": 11000,
-            "cmdSrl": 0,
+            "cmdSrl": count,
             "requestPacket": [
-                "userId": "97eosEGLtJiQmQY3",
-                "channelId": "97eosEGLtJiQmQY3"
+				"userId": config.myProductionId,
+                "channelId": config.myProductionId
             ]
         ]
-        
-        webSocketTask?.send(.data(Data(hex: config.productionSessionRequest))) { [weak self] error in
+		
+		let data: Data = writeByteBuffer(request: SessionLoginRequest(userId: config.myProductionId,
+																	  channelId: config.myProductionId))
+		
+        webSocketTask?.send(.data(data)) { [weak self] error in
             if let error = error {
                 print("sessionLogin 실패 \(error)")
             } else {
@@ -55,8 +55,38 @@ class ViewController: UIViewController {
             self?.count += 1
         }
     }
+	
+	// MARK: - Request
+	private func writeByteBuffer(request: Any?) -> Data {
+		var byteBuffer = ByteBuffer()
+		
+		byteBuffer.writeInteger(Int32(11000), endianness: .little)
+		byteBuffer.writeInteger(count, endianness: .little)
+		let str = writeObject(byteBuffer, request: request)
+		
+		return Data(hex: str)
+	}
+	
+	private func writeObject(_ byteBuffer: ByteBuffer, request: Any?) -> String {
+		var byteBuffer = byteBuffer
+		
+		if let param = request as? SessionLoginRequest {
+			byteBuffer.writeInteger(Int32(param.userId.count), endianness: .little)
+			byteBuffer.writeString(param.userId)
+			byteBuffer.writeInteger(Int32(param.channelId.count), endianness: .little)
+			byteBuffer.writeString(param.channelId)
+		} else {
+			byteBuffer.writeInteger(1)
+		}
+		
+		let str = byteBuffer.hexDump(format: .plain).replacingOccurrences(of: " ", with: "")
+		print(str)
+		
+		return str
+	}
 }
 
+// MARK: - Response
 extension ViewController {
     private func addListener(_ commandType: CommandType){
         webSocketTask?.receive { [weak self] result in
@@ -64,7 +94,10 @@ extension ViewController {
             case .success(let response):
                 switch response {
                 case .data(let data):
-                    self?.didReceiveData(ByteBuffer(data: data), commandType: commandType)
+                    let decodedData = self?.didReceiveData(ByteBuffer(data: data), commandType: commandType)
+					
+					print("======response======")
+					dump(decodedData)
                 case .string(let message):
                     self?.didReceiveMessage(message)
                 @unknown default:
@@ -83,19 +116,18 @@ extension ViewController {
         case .PING:
             print(byteBuffer)
         case .LOGIN_SESSION:
-			
-			// MARK: - byteBuffer to UINT32 - Mid-Little Endian (CDAB)
+		
 			var byteBuffer = byteBuffer
-			let cmd = byteBuffer.readInteger(endianness: .little, as: Int32.self) // 21000
+			let cmd = byteBuffer.readInteger(endianness: .little, as: Int32.self) // MARK: - byteBuffer to UINT32 - Mid-Little Endian (CDAB)
 			
-			let cmdSrl = byteBuffer.readInteger(endianness: .little, as: Int32.self) // 1
-			let errorCode = byteBuffer.readInteger(endianness: .little, as: Int32.self) // 1 (success)
-			let objectArrayLength = byteBuffer.readInteger(endianness: .little, as: Int32.self) // 1 (success)
+			let cmdSrl = byteBuffer.readInteger(endianness: .little, as: Int32.self)
+			let errorCode = byteBuffer.readInteger(endianness: .little, as: Int32.self)
+			let objectArrayLength = byteBuffer.readInteger(endianness: .little, as: Int32.self)
 			
 			var responsePacket: [ChattingRoom] = []
 			
 			if let objectArrayLength = objectArrayLength {
-				for i in 0..<objectArrayLength {
+				for _ in 0..<objectArrayLength {
 					if let object = readObject(byteBuffer: byteBuffer) {
 						responsePacket.append(object)
 					}
@@ -103,9 +135,6 @@ extension ViewController {
 			}
 			
 			let response: BaseResponse<Any> = BaseResponse(cmd: Int(cmd!), cmdSrl: Int(cmdSrl!), errorCode: Int(errorCode!), responsePacket: ChattingRooms(chattingRooms: responsePacket))
-			
-			print("======response======")
-			dump(response)
             
 			return response
         default:
@@ -114,6 +143,7 @@ extension ViewController {
 		
 		return nil
     }
+	
 	private func readObject(byteBuffer: ByteBuffer) -> ChattingRoom? {
 		var byteBuffer = byteBuffer
 		let isNull = byteBuffer.readBytes(length: 1)?.first == 1
@@ -129,11 +159,10 @@ extension ViewController {
 		var byteBuffer = byteBuffer
 		
 		let idLength = byteBuffer.readInteger(endianness: .little, as: Int32.self)
-		// MARK: - byteBuffer to Ascii
-		let id = byteBuffer.readString(length: Int(idLength!), encoding: .ascii)
+		let id = byteBuffer.readString(length: Int(idLength!), encoding: .ascii) // MARK: - byteBuffer to Ascii
 		
 		let chattingRoomNameLength = byteBuffer.readInteger(endianness: .little, as: Int32.self)
-		let chattingRoomName = byteBuffer.readString(length: Int(chattingRoomNameLength!), encoding: .utf8)
+		let chattingRoomName = byteBuffer.readString(length: Int(chattingRoomNameLength!), encoding: .utf8) // MARK: - byteBuffer to utf8
 		
 		let chattingRoomNameEnLength = byteBuffer.readInteger(endianness: .little, as: Int32.self)
 		let chattingRoomNameEn = byteBuffer.readString(length: Int(chattingRoomNameEnLength!), encoding: .utf8)

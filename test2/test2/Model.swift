@@ -32,7 +32,7 @@ struct ChattingRoom {
     var unreadMessageCount: Int?
 }
 
-struct User: Codable, Equatable {
+struct User {
     var id: String?
     var address: String? // 지갑주소
     var chattingRoomNameEn: String?
@@ -44,7 +44,7 @@ struct User: Codable, Equatable {
     var exists: Bool? // 채널이 그룹에 존재하는지 안 하는지
 }
 
-struct Message: Codable, Equatable {
+struct Message {
     var id: String?
     var roomId: String?
     var message: String?
@@ -79,4 +79,9 @@ enum CommandType {
     case BROADCAST_JOIN_CHATROOM
     case BROADCAST_NEW_POST
     case RES_BROADCAST_MAINTENANCE
+}
+
+struct SessionLoginRequest {
+	var userId: String
+	var channelId: String
 }
