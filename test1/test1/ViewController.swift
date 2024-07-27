@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     private var count: Int32 = 0
     
     // MARK: - 테스트
-    private var harkunStageId: String = Config().harkunStageId
-    private var myProductionId: String = Config().myProductionId
+    private var stageId: String = Config().stageId
+    private var productionId: String = Config().productionId
     private var productionSessionRequest: String = Config().productionSessionRequest
     private var productionSessionByte: String = Config().productionSessionByte
     private var myProductionSesssionRequest: String = Config().myProductionSesssionRequest
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
 	let floatValue: Float = 3.14
 	let doubleValue: Double = 3.141592653589793
 	let boolValue: Bool = true
-	lazy var stringValue: String = myProductionId
+	lazy var stringValue: String = productionId
 	
 	// Int32를 바이트 버퍼로 변환
 	lazy var intByteBuffer = ByteBufferUtil().toByteBuffer(from: intValue) // f82a 0000
@@ -72,17 +72,17 @@ class ViewController: UIViewController {
 			"cmd": 11000,
 			"cmdSrl": 0,
 			"requestPacket": [
-				"userId": "97eosEGLtJiQmQY3",
-				"channelId": "97eosEGLtJiQmQY3"
+				"userId": productionId,
+				"channelId": productionId
 			]
 		]
         
 		let cmd: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: intValue))
 		let cmdSrl: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: count))
-		let userIdLength: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: Int32(myProductionId.count)))
-		let userId: String = HexUtil.convertData(myProductionId.data(using: .utf8)!)
-		let channelIdLength: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: Int32(myProductionId.count)))
-		let channelId: String = HexUtil.convertData(myProductionId.data(using: .utf8)!)
+		let userIdLength: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: Int32(productionId.count)))
+		let userId: String = HexUtil.convertData(productionId.data(using: .utf8)!)
+		let channelIdLength: String = HexUtil.convertData(ByteBufferUtil().toByteBuffer(from: Int32(productionId.count)))
+		let channelId: String = HexUtil.convertData(productionId.data(using: .utf8)!)
 		let hexString: String = cmd + cmdSrl + userIdLength + userId + channelIdLength + channelId
 		
 		print("hexString - \(hexString)")
